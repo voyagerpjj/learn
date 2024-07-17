@@ -1,3 +1,6 @@
+import multiprocessing as mp
+
+
 # 冒泡排序
 def sort_bubble(data, task, progress):
     for i in range(len(data)):
@@ -10,25 +13,25 @@ def sort_bubble(data, task, progress):
 
 # 桶排序
 def sort_bucket(data, task, progress):
-    bucket = []
-    slot_num = 1000
-    for i in range(slot_num):
-        bucket.append([])
-        progress.update(task, advance=1)
-    for j in data:
-        index_b = int(slot_num * j)
-        bucket[index_b].append(j)
-        progress.update(task, advance=1)
-    for i in range(slot_num):
-        bucket[i] = sorted(bucket[i])
-        progress.update(task, advance=1)
-    k = 0
-    for i in range(slot_num):
-        for j in range(len(bucket[i])):
-            data[k] = bucket[i][j]
-            k += 1
-        progress.update(task, advance=1)
-    return data
+    # 创建桶列表，每个桶用一个列表表示
+    num_buckets = len(data) / 100
+    buckets = [[] for _ in range(int(num_buckets))]
+
+    # 将待排序数组中的元素分配到对应的桶中
+    for num in data:
+        bucket_index = int(num % 100)
+        buckets[bucket_index].append(num)
+    # 对每个非空桶中的元素进行排序
+    for bucket in buckets:
+        bucket.sort()
+        progress.update(task, advance=len(bucket))
+
+    # 合并所有桶中的元素
+    sorted_data = []
+    for bucket in buckets:
+        sorted_data.extend(bucket)
+
+    return sorted_data
 
 
 # 选择排序
@@ -39,8 +42,8 @@ def sort_selection(data, task, progress):
         for j in range(i + 1, data_count):
             if data[j] < data[min_index]:
                 min_index = j
+            progress.update(task, advance=1)
         data[i], data[min_index] = data[min_index], data[i]
-        progress.update(task, advance=1)
     return data
 
 
@@ -72,6 +75,30 @@ def merge(left, right, task, progress):
 
 # 插入排序
 def sort_insertion(data, task, progress):
+    n = len(data)
+    update_interval = max(n // 100, 1)  # 每处理1%的数据更新进度
+    progress_update_count = 0
+
+    for i in range(1, n):
+        key = data[i]
+        j = i - 1
+        while j >= 0 and data[j] > key:
+            data[j + 1] = data[j]
+            j -= 1
+        data[j + 1] = key
+
+        progress_update_count += 1
+        if progress_update_count % update_interval == 0:
+            progress.update(task, advance=update_interval)
+
+    remaining = n % update_interval
+    if remaining > 0:
+        progress.update(task, advance=remaining)
+
+    return data
+
+
+def insertion_sort(data):
     for i in range(1, len(data)):
         key = data[i]
         j = i - 1
@@ -79,8 +106,32 @@ def sort_insertion(data, task, progress):
             data[j + 1] = data[j]
             j -= 1
         data[j + 1] = key
-        progress.update(task, advance=1)
     return data
+
+
+# 处理每个块的排序
+def process_chunk(data_chunk):
+    return insertion_sort(data_chunk)
+
+
+# 多进程排序函数
+def parallel_insertion_sort(data, num_chunks):
+    chunk_size = len(data) // num_chunks
+    chunks = [data[i * chunk_size:(i + 1) * chunk_size] for i in range(num_chunks)]
+
+    with mp.Pool(processes=num_chunks) as pool:
+        sorted_chunks = pool.map(process_chunk, chunks)
+
+    sorted_data = merge_sorted_chunks(sorted_chunks)
+    return sorted_data
+
+
+# 合并排序块
+def merge_sorted_chunks(chunks):
+    result = []
+    for chunk in chunks:
+        result.extend(chunk)
+    return insertion_sort(result)
 
 
 # 希尔排序
@@ -94,8 +145,8 @@ def sort_shell(data, task, progress):
                 data[j] = data[j - gap]
                 j -= gap
             data[j] = temp
-        gap //= 2
         progress.update(task, advance=1)
+        gap //= 2
     return data
 
 
@@ -147,11 +198,9 @@ def sort_radix_one(data, exp, task, progress):
     for i in range(n):
         index = data[i] // exp
         count[index % 10] += 1
-        progress.update(task, advance=1)
 
     for i in range(1, 10):
         count[i] += count[i - 1]
-        progress.update(task, advance=1)
 
     i = n - 1
     while i >= 0:
@@ -163,13 +212,12 @@ def sort_radix_one(data, exp, task, progress):
 
     for i in range(len(data)):
         data[i] = output[i]
-        progress.update(task, advance=1)
 
 
 def sort_radix(data, task, progress):
     max_val = max(data)
     exp = 1
     while max_val // exp > 0:
-        sort_radix(data, exp, task, progress)
+        sort_radix_one(data, exp, task, progress)
         exp *= 10
     return data

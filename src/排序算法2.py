@@ -1,3 +1,6 @@
+import multiprocessing as mp
+
+
 # 冒泡排序
 def sort_bubble(data):
     for i in range(len(data)):
@@ -9,22 +12,24 @@ def sort_bubble(data):
 
 # 桶排序
 def sort_bucket(data):
-    bucket = []
-    slot_num = 1000
-    for i in range(slot_num):
-        bucket.append([])
-    for j in data:
-        index_b = int(slot_num * j)
-        bucket[index_b].append(j)
-    for i in range(slot_num):
-        bucket[i] = sorted(bucket[i])
-    k = 0
-    for i in range(slot_num):
-        for j in range(len(bucket[i])):
-            data[k] = bucket[i][j]
-            k += 1
-    return data
+    # 创建桶列表，每个桶用一个列表表示
+    num_buckets = len(data) / 100
+    buckets = [[] for _ in range(int(num_buckets))]
 
+    # 将待排序数组中的元素分配到对应的桶中
+    for num in data:
+        bucket_index = int(num % 100)
+        buckets[bucket_index].append(num)
+    # 对每个非空桶中的元素进行排序
+    for bucket in buckets:
+        bucket.sort()
+
+    # 合并所有桶中的元素
+    sorted_data = []
+    for bucket in buckets:
+        sorted_data.extend(bucket)
+
+    return sorted_data
 
 # 选择排序
 def sort_selection(data):
@@ -65,6 +70,20 @@ def merge(left, right):
 
 # 插入排序
 def sort_insertion(data):
+    n = len(data)
+    progress_update_count = 0
+    for i in range(1, n):
+        key = data[i]
+        j = i - 1
+        while j >= 0 and data[j] > key:
+            data[j + 1] = data[j]
+            j -= 1
+        data[j + 1] = key
+    return data
+
+
+# 插入排序函数
+def insertion_sort(data):
     for i in range(1, len(data)):
         key = data[i]
         j = i - 1
@@ -73,6 +92,31 @@ def sort_insertion(data):
             j -= 1
         data[j + 1] = key
     return data
+
+
+# 处理每个块的排序
+def process_chunk(data_chunk):
+    return insertion_sort(data_chunk)
+
+
+# 多进程排序函数
+def parallel_insertion_sort(data, num_chunks):
+    chunk_size = len(data) // num_chunks
+    chunks = [data[i * chunk_size:(i + 1) * chunk_size] for i in range(num_chunks)]
+
+    with mp.Pool(processes=num_chunks) as pool:
+        sorted_chunks = pool.map(process_chunk, chunks)
+
+    sorted_data = merge_sorted_chunks(sorted_chunks)
+    return sorted_data
+
+
+# 合并排序块
+def merge_sorted_chunks(chunks):
+    result = []
+    for chunk in chunks:
+        result.extend(chunk)
+    return insertion_sort(result)
 
 
 # 希尔排序
@@ -150,10 +194,10 @@ def sort_radix_one(data, exp):
         data[i] = output[i]
 
 
-def sort_radix(data, task, progress):
+def sort_radix(data):
     max_val = max(data)
     exp = 1
     while max_val // exp > 0:
-        sort_radix(data, exp)
+        sort_radix_one(data, exp)
         exp *= 10
     return data

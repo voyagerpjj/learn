@@ -3,6 +3,9 @@ from rich.progress import Progress
 from src import 排序算法
 from src import 排序算法2
 from concurrent.futures import ProcessPoolExecutor
+import multiprocessing as mp
+
+mode_list = {1: "基数", 2: "选择", 3: "归并", 4: "插入", 5: "希尔", 6: "堆", 7: "快速", 8: "桶"}
 
 
 # 读取数据
@@ -11,8 +14,9 @@ def read_data(file_name):
         data = file.read()
         data_list = [item.strip() for item in data.split(',')]
         data_list = [int(x) for x in data_list]
-        # for x in data_list:
-        #     print(x, end=' ')
+        for x in data_list:
+            if x < 0:
+                print(x, end=' ')
         print(f"读取数据完成，共{len(data_list)}条数据")
         return data_list
 
@@ -20,11 +24,10 @@ def read_data(file_name):
 # 处理数据
 def process_data(data, mode, is_progress):
     start_time = time.time()
-    end_sort_time = 0
     if is_progress:
         with Progress() as progress:
-            task = progress.add_task(f"{sort_name(mode)}排序中...", total=len(data))
-            print(f"开始{sort_name(mode)}排序")
+            task = progress.add_task(f"{mode_list[mode]}排序中...", total=len(data))
+            print(f"开始{mode_list[mode]}排序")
             if mode == 1:
                 排序算法.sort_radix(data, task, progress)
             elif mode == 2:
@@ -41,8 +44,8 @@ def process_data(data, mode, is_progress):
                 排序算法.sort_quick(data, task, progress)
             elif mode == 8:
                 排序算法.sort_bucket(data, task, progress)
-            end_sort_time = time.time()
     else:
+        print(f"开始{mode_list[mode]}排序")
         if mode == 1:
             排序算法2.sort_radix(data)
         elif mode == 2:
@@ -59,40 +62,18 @@ def process_data(data, mode, is_progress):
             排序算法2.sort_quick(data)
         elif mode == 8:
             排序算法2.sort_bucket(data)
-        end_sort_time = time.time()
-    print(f"{sort_name(mode)}排序完成，耗时：{(end_sort_time - start_time)}s")
+    end_sort_time = time.time()
+    print(f"{mode_list[mode]}排序完成，耗时：{(end_sort_time - start_time)}s")
     write_data(data, mode)
     end_time = time.time()
-    print(f"{sort_name(mode)}处理完成，耗时：{(end_time - start_time)}s")
+    print(f"{mode_list[mode]}处理完成，耗时：{(end_time - start_time)}s")
 
 
 # 写入处理结果
 def write_data(data, mode):
-    if mode == 1:
-        with open('data\处理结果1（基数）.txt', 'w') as file:
-            file.write(', '.join(str(data) for data in data))
-    elif mode == 2:
-        with open('data\处理结果2（选择）.txt', 'w') as file:
-            file.write(', '.join(str(data) for data in data))
-    elif mode == 3:
-        with open('data\处理结果3（归并）.txt', 'w') as file:
-            file.write(', '.join(str(data) for data in data))
-    elif mode == 4:
-        with open('data\处理结果4（插入）.txt', 'w') as file:
-            file.write(', '.join(str(data) for data in data))
-    elif mode == 5:
-        with open('data\处理结果5（希尔）.txt', 'w') as file:
-            file.write(', '.join(str(data) for data in data))
-    elif mode == 6:
-        with open('data\处理结果6（堆）.txt', 'w') as file:
-            file.write(', '.join(str(data) for data in data))
-    elif mode == 7:
-        with open('data\处理结果7（快速）.txt', 'w') as file:
-            file.write(', '.join(str(data) for data in data))
-    elif mode == 8:
-        with open('data\处理结果8（桶）.txt', 'w') as file:
-            file.write(', '.join(str(data) for data in data))
-    print(f"处理结果{sort_name(mode)}已写入文件")
+    with open(f'data\处理结果{mode}（{mode_list[mode]}）排序.txt', 'w') as file:
+        file.write(', '.join(str(data) for data in data))
+    print(f"处理结果 {mode_list[mode]}排序 已写入文件")
 
 
 # 主运行函数
@@ -124,20 +105,4 @@ if __name__ == "__main__":
     main()
 
 
-def sort_name(mode):
-    if mode == 1:
-        return "1（基数）"
-    elif mode == 2:
-        return "2（选择）"
-    elif mode == 3:
-        return "3（归并）"
-    elif mode == 4:
-        return "4（插入）"
-    elif mode == 5:
-        return "5（希尔）"
-    elif mode == 6:
-        return "6（堆）"
-    elif mode == 7:
-        return "7（快速）"
-    elif mode == 8:
-        return "8（桶）"
+
