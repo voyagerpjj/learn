@@ -38,3 +38,8 @@ if __name__ == "__main__":
 
     rref_matrix = to_reduced_row_echelon_form(matrix)
     print(f"阶梯型矩阵：\n{rref_matrix}")
+    str1 = str(f"原矩阵为{matrix}\n")
+    str2 = str(f"阶梯型矩阵：\n{rref_matrix}")
+    print(str2)
+    with open("E:\python\小学期/data/题目3.1.txt", "w", encoding="utf-8") as f:
+        f.write(str1 + str2)

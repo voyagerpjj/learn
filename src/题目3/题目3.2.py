@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def solve_linear_system(equations, constants):
     equations = np.array(equations, dtype=float)
     constants = np.array(constants, dtype=float)
@@ -54,4 +55,8 @@ if __name__ == "__main__":
     constants = [10, 3, -1]
 
     solutions = solve_linear_system(equations, constants)
-    print(f"方程组的解：\n{solutions}")
+    str1 = str(f"原方程为{equations}\n{constants}")
+    str2 = str(f"\n方程组的解：\n{solutions}")
+    print(str2)
+    with open("E:\python\小学期/data/题目3.2.txt", "w", encoding="utf-8") as f:
+        f.write(str1 + str2)

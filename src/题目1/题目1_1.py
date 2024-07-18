@@ -77,14 +77,14 @@ def process_data(data, mode, is_progress):
 
 # 写入处理结果
 def write_data(data, mode):
-    with open(f'data\处理结果{mode}（{mode_list[mode]}）排序.txt', 'w') as file:
+    with open(f'E:\python\小学期\data\处理结果{mode}（{mode_list[mode]}）排序.txt', 'w') as file:
         file.write(', '.join(str(data) for data in data))
     print(f"处理结果 {mode_list[mode]}排序 已写入文件")
 
 
 # 主运行函数
 def main():
-    data = read_data("数据文件2024.txt")
+    data = read_data("E:\python\小学期/数据文件2024.txt")
     # data = read_data("处理结果7（快速）.txt")
     # print(f"打印示例数据:{data[0::50]}")
     # last_data = 0
@@ -98,6 +98,7 @@ def main():
     mode = int(input("请输入排序方式：(1.基数排序 2.选择排序"
                      "3.归并排序 4.插入排序 5.希尔排序 6.堆排序"
                      "7.快速排序 8.桶排序 9.全部运行)"))
+    # 全部运行的时候使用进行 多进程 并行加速
     if mode == 9:
         with ProcessPoolExecutor() as executor:
             futures = [executor.submit(process_data, data.copy(), i, False) for i in range(1, 9)]

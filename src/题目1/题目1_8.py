@@ -45,11 +45,11 @@ def parallel_is_su(data, num_chunks):
 
 
 def main():
-    data = read_data("数据文件2024.txt")
+    data = read_data("E:\python\小学期\数据文件2024.txt")
     num_list = parallel_is_su(data, mp.cpu_count())
     print(num_list)
     print(len(num_list))
-    with open("data/题目1.8.txt", "w", encoding="utf-8") as f:
+    with open("E:\python\小学期\data/题目1.8.txt", "w", encoding="utf-8") as f:
         str1 = "一共有 " + str(len(num_list)) + " 个素数" + "\n"
         str4 = "最大值是" + str(np.max(num_list))
         f.write(str1 + str4)
