@@ -13,14 +13,22 @@ def sort_bubble(data, task, progress):
 
 # 桶排序
 def sort_bucket(data, task, progress):
+    # 找到数据中的最大值和最小值
+    min_value = min(data)
+    max_value = max(data)
+
+    # 计算桶的数量
+    bucket_range = (max_value - min_value) / 2000
+    num_buckets = len(data) // 100 + 1  # 确保至少有一个桶
+
     # 创建桶列表，每个桶用一个列表表示
-    num_buckets = len(data) / 100
-    buckets = [[] for _ in range(int(num_buckets))]
+    buckets = [[] for _ in range(num_buckets)]
 
     # 将待排序数组中的元素分配到对应的桶中
     for num in data:
-        bucket_index = int(num % 100)
+        bucket_index = int((num - min_value) / bucket_range)
         buckets[bucket_index].append(num)
+
     # 对每个非空桶中的元素进行排序
     for bucket in buckets:
         bucket.sort()

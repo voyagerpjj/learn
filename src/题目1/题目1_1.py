@@ -10,15 +10,21 @@ mode_list = {1: "基数", 2: "选择", 3: "归并", 4: "插入", 5: "希尔", 6:
 
 # 读取数据
 def read_data(file_name):
+    data_list = []
     with open(file_name, 'r') as file:
-        data = file.read()
-        data_list = [item.strip() for item in data.split(',')]
-        data_list = [int(x) for x in data_list]
-        for x in data_list:
-            if x < 0:
-                print(x, end=' ')
+        for line in file:
+            line = line.strip()
+            if line:
+                items = line.split(',')
+                for item in items:
+                    item = item.strip()
+                    try:
+                        num = int(item)
+                        data_list.append(num)
+                    except ValueError:
+                        print(f"Ignoring invalid number: {item}")
         print(f"读取数据完成，共{len(data_list)}条数据")
-        return data_list
+    return data_list
 
 
 # 处理数据
