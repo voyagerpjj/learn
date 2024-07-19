@@ -63,8 +63,9 @@ def partial_fraction(numerator, denominator):
             temp = numerator
             for j, other_root in enumerate(roots):
                 if j != i:
-                    temp = temp / (x ** roots[other_root] - other_root)
-            A = temp.subs(x, root) / (x ** roots[root] - root)
+                    temp = temp / ((x - other_root) ** roots[other_root])
+            A = numerator / temp
+            A = A.subs(x, root) / ((x - root) ** roots[root])
             result.append(A)
         result = [i for i in result if i != 0]  # 删除为0的结果
         for i in range(len(result)):
