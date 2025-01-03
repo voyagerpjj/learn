@@ -1,0 +1,13 @@
+[
+{
+  "directory": "/home/pjj/learn/build",
+  "command": "clang++   -I../inc -isystem /usr/include/opencv4  -g   -std=gnu++2a -o CMakeFiles/hello_word.dir/src/OpenCV_1.cpp.o -c /home/pjj/learn/src/OpenCV_1.cpp",
+  "file": "/home/pjj/learn/src/OpenCV_1.cpp"
+},
+
+{
+  "directory": "/home/pjj/learn/build",
+  "command": "clang++   -I../inc -isystem /usr/include/opencv4  -g   -std=gnu++2a -o CMakeFiles/hello_word.dir/src/main.cpp.o -c /home/pjj/learn/src/main.cpp",
+  "file": "/home/pjj/learn/src/main.cpp"
+}
+]

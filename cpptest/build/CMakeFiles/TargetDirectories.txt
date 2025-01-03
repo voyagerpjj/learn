@@ -1,0 +1,3 @@
+/home/pjj/learn/build/CMakeFiles/rebuild_cache.dir
+/home/pjj/learn/build/CMakeFiles/edit_cache.dir
+/home/pjj/learn/build/CMakeFiles/hello_word.dir

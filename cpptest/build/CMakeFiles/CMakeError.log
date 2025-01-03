@@ -1,0 +1,106 @@
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /home/pjj/learn/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_e02ac/fast && /usr/bin/make -f CMakeFiles/cmTC_e02ac.dir/build.make CMakeFiles/cmTC_e02ac.dir/build
+make[1]: Entering directory '/home/pjj/learn/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e02ac.dir/src.c.o
+/usr/bin/cc   -fPIC -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_e02ac.dir/src.c.o   -c /home/pjj/learn/build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_e02ac
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e02ac.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -DCMAKE_HAVE_LIBC_PTHREAD    CMakeFiles/cmTC_e02ac.dir/src.c.o  -o cmTC_e02ac 
+/usr/bin/ld: CMakeFiles/cmTC_e02ac.dir/src.c.o: in function `main':
+src.c:(.text+0x46): undefined reference to `pthread_create'
+/usr/bin/ld: src.c:(.text+0x52): undefined reference to `pthread_detach'
+/usr/bin/ld: src.c:(.text+0x63): undefined reference to `pthread_join'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_e02ac.dir/build.make:87: cmTC_e02ac] Error 1
+make[1]: Leaving directory '/home/pjj/learn/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_e02ac/fast] Error 2
+
+
+Source file was:
+#include <pthread.h>
+
+void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/pjj/learn/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_fe4df/fast && /usr/bin/make -f CMakeFiles/cmTC_fe4df.dir/build.make CMakeFiles/cmTC_fe4df.dir/build
+make[1]: Entering directory '/home/pjj/learn/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_fe4df.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_fe4df.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_fe4df
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fe4df.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_fe4df.dir/CheckFunctionExists.c.o  -o cmTC_fe4df  -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_fe4df.dir/build.make:87: cmTC_fe4df] Error 1
+make[1]: Leaving directory '/home/pjj/learn/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_fe4df/fast] Error 2
+
+
+
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /home/pjj/learn/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_12057 && [1/2] Building C object CMakeFiles/cmTC_12057.dir/src.c.o
+[2/2] Linking C executable cmTC_12057
+FAILED: cmTC_12057 
+: && /usr/bin/gcc -fPIC -DCMAKE_HAVE_LIBC_PTHREAD   CMakeFiles/cmTC_12057.dir/src.c.o  -o cmTC_12057   && :
+/usr/bin/ld: CMakeFiles/cmTC_12057.dir/src.c.o: in function `main':
+src.c:(.text+0x46): undefined reference to `pthread_create'
+/usr/bin/ld: src.c:(.text+0x52): undefined reference to `pthread_detach'
+/usr/bin/ld: src.c:(.text+0x63): undefined reference to `pthread_join'
+collect2: error: ld returned 1 exit status
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+#include <pthread.h>
+
+void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/pjj/learn/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_8522f && [1/2] Building C object CMakeFiles/cmTC_8522f.dir/CheckFunctionExists.c.o
+[2/2] Linking C executable cmTC_8522f
+FAILED: cmTC_8522f 
+: && /usr/bin/gcc -fPIC -DCHECK_FUNCTION_EXISTS=pthread_create   CMakeFiles/cmTC_8522f.dir/CheckFunctionExists.c.o  -o cmTC_8522f  -lpthreads && :
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+ninja: build stopped: subcommand failed.
+
+
+
