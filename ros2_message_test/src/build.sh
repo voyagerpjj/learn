@@ -2,6 +2,7 @@
 
 # 设置build目录的路径
 BUILD_DIR="../build"
+source /opt/ros/foxy/setup.bash
 
 # 检查命令行参数
 if [ $# -eq 1 ]; then

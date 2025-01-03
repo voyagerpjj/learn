@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+    <name>ros2_message_test_my</name>
+    <version>0.0.1</version>
+    <description>ros2_message_test_my</description>
+    <maintainer email="3104463130@qq.com">yuanlu</maintainer>
+    <license>MIT</license>
+
+    <!-- Build system dependencies -->
+    <buildtool_depend>ament_cmake</buildtool_depend>
+
+    <!-- Runtime dependencies -->
+    <exec_depend>rclcpp</exec_depend>
+    <exec_depend>std_msgs</exec_depend>
+
+    <export>
+        <build_type>ament_cmake</build_type>
+    </export>
+</package>
